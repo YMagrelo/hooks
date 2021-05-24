@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from "react";
+
+const MyContext = React.createContext();
 
 const App = () => {
-  
   return (
-    <div className="App">
-      <HookSwitcher />
-    </div>
+    <MyContext.Provider value="Hello world with context">
+      <Child />
+    </MyContext.Provider>
   );
-}
+};
 
-const HookSwitcher = () => {
-  const [ themeColor, setThemeColor ] = useState('white');
-  
+const Child = () => {
+  const value = useContext(MyContext);
   return (
-    <div style={{ padding: '10px', backgroundColor: themeColor}}>
-      <button onClick={() => {setThemeColor('black')}}>Dark</button>
-      <button onClick={() => {setThemeColor('white')}}>Light</button>
-    </div>
+    <p>{value}</p>
   )
 }
 
