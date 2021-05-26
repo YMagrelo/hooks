@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 
 const App = () => {
   const [ value, setValue ] = useState(0);
@@ -9,8 +9,9 @@ const App = () => {
       <div>
         <button onClick={() => setValue((v) => v + 1)}>+</button>
         <button onClick={() => setVisible(false)}>hide</button>
+        <button onClick={() => setValue((v) => v = 0)}>reset</button>
         <HookCounter value={value} />
-        <ClassCounter value={value} />
+        {/* <ClassCounter value={value} /> */}
       </div>
     )
   } else {
@@ -22,6 +23,17 @@ const App = () => {
 };
 
 const HookCounter = ({ value }) => {
+  useEffect(() => {
+   console.log('mount'); 
+  }, [])
+
+  useEffect(() => {
+    console.log('update'); 
+   })
+
+   useEffect(() => {
+    return () => console.log('willUnmount');
+   }, [])
   return <p>{value}</p>
 }
 
