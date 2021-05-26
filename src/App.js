@@ -11,6 +11,7 @@ const App = () => {
         <button onClick={() => setVisible(false)}>hide</button>
         <button onClick={() => setValue((v) => v = 0)}>reset</button>
         <HookCounter value={value} />
+        <Notification />
         {/* <ClassCounter value={value} /> */}
       </div>
     )
@@ -35,6 +36,18 @@ const HookCounter = ({ value }) => {
     return () => console.log('willUnmount');
    }, [])
   return <p>{value}</p>
+}
+
+const Notification = () => {
+  const [ visible, setVisible ] = useState(true);
+
+  useEffect(() => {
+   return setTimeout(() => {
+      setVisible(false);
+    }, 2500);
+  }, []);
+
+  return visible ? <div><p>hello</p></div> : null;
 }
 
 class ClassCounter extends Component {
