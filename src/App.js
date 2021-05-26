@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 
 const App = () => {
-  const [ value, setValue ] = useState(0);
+  const [ value, setValue ] = useState(1);
   const [ visible, setVisible ] = useState(true);
 
   if(visible) {
@@ -9,10 +9,8 @@ const App = () => {
       <div>
         <button onClick={() => setValue((v) => v + 1)}>+</button>
         <button onClick={() => setVisible(false)}>hide</button>
-        <button onClick={() => setValue((v) => v = 0)}>reset</button>
-        <HookCounter value={value} />
-        <Notification />
-        {/* <ClassCounter value={value} /> */}
+        <button onClick={() => setValue((v) => v = 1)}>reset</button>
+        <PlanetInfo id={value}/>
       </div>
     )
   } else {
@@ -20,52 +18,23 @@ const App = () => {
       <button onClick={() => setVisible(true)}>show</button>
     );
   }
-  
 };
 
-const HookCounter = ({ value }) => {
+const PlanetInfo = ({ id }) => {
+  const [ name, setName ] = useState(null);
+  
   useEffect(() => {
-   console.log('mount'); 
-  }, [])
-
-  useEffect(() => {
-    console.log('update'); 
-   })
-
-   useEffect(() => {
-    return () => console.log('willUnmount');
-   }, [])
-  return <p>{value}</p>
-}
-
-const Notification = () => {
-  const [ visible, setVisible ] = useState(true);
-
-  useEffect(() => {
-   return setTimeout(() => {
-      setVisible(false);
-    }, 2500);
-  }, []);
-
-  return visible ? <div><p>hello</p></div> : null;
-}
-
-class ClassCounter extends Component {
-  componentDidMount() {
-    console.log('class: mount');
-  }
-
-  componentDidUpdate(props) {
-    console.log('class: update');
-  }
-
-  componentWillUnmount() {
-    console.log('class: unmount');
-  }
-
-  render() {
-    return <p>{this.props.value}</p>
-  }
+    let cancelled = false;
+    fetch(`https://swapi.co/api/planets/${id}/`)
+    .then(res => res.json())
+    .then(data => !cancelled && setName(data.name))
+    return () => cancelled = true;
+  }, [id]);
+    
+  
+  return (
+    <div>{id} - {name}</div>
+  )
 }
 
 export default App;
